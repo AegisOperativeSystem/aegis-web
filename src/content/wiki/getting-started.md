@@ -18,7 +18,7 @@ Select the USB device from the firmware boot menu. The loader waits five seconds
 
 ## 3. Use the live session
 
-The live image creates a passwordless user named `live` and signs that user in through greetd. The session starts labwc, paints the background, starts the panel, and opens the installer.
+The live image creates a passwordless user named `live` and signs that user in through greetd. The session starts labwc, paints the background, and starts the panel and the dock. A short tour runs on the first login. The installer opens when the tour finishes.
 
 The live account exists only on the image. The installed system does not keep it.
 

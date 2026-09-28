@@ -13,6 +13,8 @@ Aegis packages are normal Arch packages. `aegis-pkg` is a GTK4 front end for the
 | Package | What it installs |
 | --- | --- |
 | `aegis-shell` | GTK4 panel and stylesheet |
+| `aegis-dock` | Bottom dock and application grid |
+| `aegis-tour` | First-run tour |
 | `aegis-installer` | Live installer and polkit policy |
 | `aegis-pkg` | Repository client |
 | `aegis-session` | labwc session, theme, foot config, os-release hook |

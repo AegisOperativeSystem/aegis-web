@@ -16,7 +16,7 @@ If the greeter does not appear, boot the firmware menu and select the Linux Boot
 
 ## Session
 
-After login, `aegis-session` sets the Wayland environment, starts the polkit authentication agent when it is installed, starts PipeWire, and runs labwc. Labwc paints a solid background and starts the Aegis panel.
+After login, `aegis-session` sets the Wayland environment, starts the polkit authentication agent when it is installed, starts PipeWire, and runs labwc. Labwc paints a solid background and starts the panel and the dock. The first login also opens the tour.
 
 The installer does not open on its own after installation. Launch it from the application menu only if you intend to partition another disk. That requires the live image marker, or an explicit `--force`.
 
