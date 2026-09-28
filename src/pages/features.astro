@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Features of Aegis OS: live desktop, graphical installer, tuned kernel, and a pacman repository."
+const features = [
+  ["/desktop", "Live desktop", "labwc, a GTK4 panel, foot, and PipeWire start from the ISO."],
+  ["/install", "Guided install", "The installer confirms the disk name, then runs a tested partition and pacstrap plan."],
+  ["/kernel", "Three kernel profiles", "balanced, performance, and powersave change governor, preemption, and Hz."],
+  ["/packages", "Repository client", "aegis-pkg installs and removes packages through pacman and polkit."],
+  ["/architecture", "UEFI only", "systemd-boot is the single boot path. The image is x86_64."],
+  ["/security", "Locked root", "The installed root password is locked. The created user is in wheel."],
+  ["/releases", "Tagged releases", "Version tags upload the ISO and the kernel. The package database rolls forward."],
+  ["/wiki", "Written guides", "Requirements, USB writing, first boot, keys, and troubleshooting have their own articles."],
+]
+---
+
+<Base
+  title="Features"
+  description={description}
+  path="/features"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Features", path: "/features" }])]}
+>
+  <PageIntro
+    eyebrow="Features"
+    title="A small system with a complete install path"
+    lede="Aegis OS keeps the Arch userland and replaces the scattered desktop setup with one session, one installer, and one package repository."
+  />
+  <div class="mx-auto grid max-w-6xl gap-4 px-6 py-12 md:grid-cols-2">
+    {features.map(([href, title, text]) => (
+      <a class="rounded-2xl border border-line p-6 hover:border-accent hover:bg-elev" href={href}>
+        <h2 class="text-xl font-semibold">{title}</h2>
+        <p class="mt-2 text-muted">{text}</p>
+      </a>
+    ))}
+  </div>
+</Base>

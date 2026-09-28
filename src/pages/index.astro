@@ -1,0 +1,134 @@
+---
+import Base from "../layouts/Base.astro"
+import ShellMock from "../components/ShellMock.astro"
+import { repos, siteDescription, githubOrg } from "../data/site"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Aegis OS",
+    url: site.href,
+    sameAs: [githubOrg],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Aegis OS",
+    url: site.href,
+    description: siteDescription,
+    inLanguage: "en",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Aegis OS",
+    applicationCategory: "OperatingSystem",
+    operatingSystem: "Linux",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    url: new URL("/", site).href,
+    downloadUrl: new URL("/download", site).href,
+    description: siteDescription,
+  },
+  breadcrumbLd(site, [{ name: "Home", path: "/" }]),
+]
+
+const points = [
+  { href: "/desktop", title: "GTK4 desktop", text: "A 32 px panel on labwc, with foot, PipeWire, and a square theme." },
+  { href: "/install", title: "Graphical installer", text: "GPT, a 1 GiB EFI partition, ext4 or btrfs, then systemd-boot." },
+  { href: "/kernel", title: "Longterm kernel", text: "linux-aegis 6.18 with balanced, performance, and powersave profiles." },
+  { href: "/packages", title: "Pacman repository", text: "First-party packages and a GTK client that calls pacman." },
+]
+---
+
+<Base
+  title="Aegis OS — Lightweight Arch for UEFI"
+  description={siteDescription}
+  path="/"
+  jsonLd={jsonLd}
+>
+  <section class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:py-24">
+    <div>
+      <p class="text-sm font-semibold text-accent">Arch Linux · x86_64 · UEFI</p>
+      <h1 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.12]">
+        A fast Arch system, with the weight removed.
+      </h1>
+      <p class="mt-5 max-w-xl text-lg leading-8 text-muted">
+        Aegis OS is a live image, a GTK4 desktop, and a graphical installer. Pacman stays the package manager. The boot path is systemd-boot.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href="/download">Download the ISO</a>
+        <a class="btn btn-secondary" href="/wiki">Read the wiki</a>
+      </div>
+    </div>
+    <ShellMock />
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 pb-8" aria-label="Platform">
+    <dl class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      {
+        [
+          ["Desktop", "GTK4 on labwc"],
+          ["Boot", "UEFI systemd-boot"],
+          ["Kernel", "Linux 6.18 LTS"],
+          ["Packages", "pacman"],
+        ].map(([term, detail]) => (
+          <div class="bg-elev px-5 py-4">
+            <dt class="text-sm text-muted">{term}</dt>
+            <dd class="mt-1 font-semibold">{detail}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-16">
+    <h2 class="text-3xl font-semibold tracking-tight">What ships in the image</h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+      {
+        points.map((point) => (
+          <a class="block rounded-2xl border border-line bg-elev p-6 hover:border-accent active:scale-[0.99]" href={point.href}>
+            <h3 class="text-xl font-semibold">{point.title}</h3>
+            <p class="mt-2 text-muted">{point.text}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-6xl gap-8 px-6 py-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div>
+      <h2 class="text-3xl font-semibold tracking-tight">Three repositories, one release order</h2>
+      <p class="mt-4 text-muted">
+        The kernel is published first, the pacman database indexes it, and a version tag on the OS repository uploads the ISO. Lint runs on every pull request. The long builds run on tags.
+      </p>
+    </div>
+    <ul class="grid gap-3">
+      {
+        repos.map((repo) => (
+          <li>
+            <a class="flex min-h-11 items-center justify-between gap-4 rounded-2xl border border-line px-5 py-4 hover:bg-elev" href={repo.href}>
+              <span class="font-semibold">{repo.name}</span>
+              <span class="text-sm text-muted">{repo.role}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-16">
+    <div class="rounded-2xl border border-line bg-elev px-6 py-8 sm:px-8">
+      <h2 class="text-3xl font-semibold tracking-tight">Install it from the live desktop</h2>
+      <p class="mt-4 max-w-2xl text-muted">
+        Boot the image, confirm the whole disk by typing its name, and let the installer write the EFI partition, the root filesystem, and the bootloader.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href="/install">Installation guide</a>
+        <a class="btn btn-secondary" href="/architecture">Architecture</a>
+      </div>
+    </div>
+  </section>
+</Base>

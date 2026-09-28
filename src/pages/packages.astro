@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+import { packageRepo } from "../data/site"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Aegis packages are pacman packages. The GTK client installs and removes them from the signed repository."
+const packages = [
+  ["aegis-shell", "GTK4 panel"],
+  ["aegis-installer", "Live installer and polkit policy"],
+  ["aegis-pkg", "Repository client"],
+  ["aegis-session", "labwc session, theme, and os-release"],
+  ["aegis-mirrorlist", "Repository server and pacman hook"],
+  ["aegis-keyring", "Public signing key, when published"],
+  ["linux-aegis", "Kernel image and modules"],
+  ["linux-aegis-headers", "Headers for external modules"],
+]
+---
+
+<Base
+  title="Packages"
+  description={description}
+  path="/packages"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Packages", path: "/packages" }])]}
+>
+  <PageIntro
+    eyebrow="Packages"
+    title="Pacman, with an Aegis repository"
+    lede="The client lists the aegis database and installs or removes a package through pkexec. Names stay inside the pacman character set."
+  />
+  <section class="mx-auto max-w-6xl px-6 py-12">
+    <div class="overflow-x-auto rounded-2xl border border-line">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-elev">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Package</th>
+            <th class="px-4 py-3 font-semibold">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {packages.map(([name, role]) => (
+            <tr class="border-t border-line">
+              <td class="px-4 py-3 font-mono text-xs sm:text-sm">{name}</td>
+              <td class="px-4 py-3">{role}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <h2 class="mt-12 text-2xl font-semibold">Repository</h2>
+    <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-elev p-5 font-mono text-sm"><code>{`[aegis]
+SigLevel = Optional TrustAll
+Server = ${packageRepo}`}</code></pre>
+    <p class="mt-4 max-w-3xl text-muted">Signature policy starts optional so systems can install packages before a keyring exists. The required-signature snippet ships with the mirror list package.</p>
+    <p class="mt-6">
+      <a class="font-semibold text-accent hover:underline" href="/wiki/packages">Package guide</a>
+    </p>
+  </section>
+</Base>

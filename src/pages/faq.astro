@@ -1,0 +1,42 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { faqs } from "../data/faq"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Answers about the Arch base, UEFI images, the kernel, pacman, Secure Boot, and the ISO download."
+const jsonLd = [
+  breadcrumbLd(site, [
+    { name: "Home", path: "/" },
+    { name: "FAQ", path: "/faq" },
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  },
+]
+---
+
+<Base title="FAQ" description={description} path="/faq" jsonLd={jsonLd}>
+  <PageIntro
+    eyebrow="FAQ"
+    title="Questions about the image and the install"
+    lede="Short answers for firmware, the kernel, pacman, and where the ISO appears."
+  />
+  <div class="mx-auto grid max-w-3xl gap-8 px-6 py-12">
+    {
+      faqs.map((faq) => (
+        <section>
+          <h2 class="text-xl font-semibold">{faq.question}</h2>
+          <p class="mt-2 leading-7 text-muted">{faq.answer}</p>
+        </section>
+      ))
+    }
+  </div>
+</Base>

@@ -1,0 +1,130 @@
+---
+import Logo from "./Logo.astro"
+import { nav } from "../data/site"
+
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/"
+
+const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
+---
+
+<header class="sticky top-0 z-20 border-b border-line/80 bg-bg/85 backdrop-blur-md">
+  <a class="skip" href="#content">Skip to content</a>
+  <div class="mx-auto flex h-16 max-w-6xl items-center gap-4 px-6">
+    <a href="/" class="inline-flex min-h-11 items-center gap-2 rounded-md pr-2" aria-label="Aegis OS home">
+      <Logo class="size-8 text-accent" />
+      <span class="text-base font-semibold tracking-tight">Aegis <span class="font-medium text-muted">OS</span></span>
+    </a>
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-muted hover:bg-elev hover:text-fg active:scale-[0.98]",
+              { "bg-elev text-fg": isCurrent(item.href) },
+            ]}
+            aria-current={isCurrent(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <button
+        type="button"
+        class="inline-flex size-11 items-center justify-center rounded-full border border-line hover:bg-elev active:scale-95"
+        data-theme-toggle
+        aria-pressed="false"
+        aria-label="Switch to light theme"
+      >
+        <svg class="icon-moon size-5" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M14.5 2.5a8.8 8.8 0 1 0 7 12.2A8.2 8.2 0 0 1 14.5 2.5Z"></path>
+        </svg>
+        <svg class="icon-sun size-5" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 7.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6ZM12 1.8v2.2m0 16v2.2M4.2 4.2l1.6 1.6m12.4 12.4 1.6 1.6M1.8 12h2.2m16 0h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          ></path>
+        </svg>
+      </button>
+      <a class="btn btn-primary hidden sm:inline-flex" href="/download">Download</a>
+      <button
+        type="button"
+        class="inline-flex size-11 items-center justify-center rounded-full border border-line hover:bg-elev active:scale-95 lg:hidden"
+        data-menu
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Open menu"
+      >
+        <svg class="size-5" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobile-nav" class="border-t border-line px-6 py-3 lg:hidden" data-menu-panel hidden aria-label="Mobile">
+    <ul class="grid gap-1">
+      {
+        nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                "flex min-h-11 items-center rounded-md px-3 text-base font-medium hover:bg-elev",
+                isCurrent(item.href) ? "text-fg" : "text-muted",
+              ]}
+              aria-current={isCurrent(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const menuButton = document.querySelector("[data-menu]")
+  const panel = document.querySelector("[data-menu-panel]")
+  const themeButton = document.querySelector("[data-theme-toggle]")
+
+  if (menuButton instanceof HTMLButtonElement && panel instanceof HTMLElement) {
+    const setOpen = (open: boolean) => {
+      menuButton.setAttribute("aria-expanded", String(open))
+      menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu")
+      panel.hidden = !open
+    }
+
+    menuButton.addEventListener("click", () => {
+      setOpen(menuButton.getAttribute("aria-expanded") !== "true")
+    })
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setOpen(false)
+    })
+  }
+
+  if (themeButton instanceof HTMLButtonElement) {
+    const apply = (theme: "light" | "dark") => {
+      document.documentElement.dataset.theme = theme
+      localStorage.setItem("aegis-theme", theme)
+      const light = theme === "light"
+      themeButton.setAttribute("aria-pressed", String(light))
+      themeButton.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme")
+      const meta = document.querySelector('meta[name="theme-color"]')
+      if (meta) meta.setAttribute("content", light ? "#f4f6f8" : "#101216")
+    }
+
+    const stored = document.documentElement.dataset.theme === "light" ? "light" : "dark"
+    apply(stored)
+
+    themeButton.addEventListener("click", () => {
+      apply(document.documentElement.dataset.theme === "light" ? "dark" : "light")
+    })
+  }
+</script>

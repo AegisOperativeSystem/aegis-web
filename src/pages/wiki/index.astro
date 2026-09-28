@@ -1,0 +1,88 @@
+---
+import Base from "../../layouts/Base.astro"
+import PageIntro from "../../components/PageIntro.astro"
+import { getCollection } from "astro:content"
+import { breadcrumbLd } from "../../lib/jsonld"
+
+const articles = (await getCollection("wiki")).sort((a, b) => a.data.order - b.data.order)
+const sections = ["Start", "Install", "Desktop", "System"] as const
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Guides for requirements, USB images, installation, the desktop, the kernel, and the pacman repository."
+---
+
+<Base
+  title="Wiki"
+  description={description}
+  path="/wiki"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Wiki", path: "/wiki" }])]}
+>
+  <PageIntro
+    eyebrow="Wiki"
+    title="Guides for the live image and the installed system"
+    lede="Twelve articles cover the path from the ISO through the first boot, the desktop, the kernel profiles, and the package repository."
+  />
+
+  <div class="mx-auto max-w-6xl px-6 py-10">
+    <label class="grid max-w-md gap-2 text-sm font-semibold" for="wiki-search">
+      Search the wiki
+      <input
+        id="wiki-search"
+        class="min-h-11 rounded-xl border border-line bg-elev px-4 font-normal text-fg placeholder:text-muted"
+        type="search"
+        placeholder="Install, kernel, USB…"
+        autocomplete="off"
+      />
+    </label>
+    <p class="mt-4 hidden text-muted" data-wiki-empty>No articles match that search.</p>
+    <div class="mt-10 grid gap-12">
+      {
+        sections.map((section) => (
+          <section data-wiki-section>
+            <h2 class="text-2xl font-semibold tracking-tight">{section}</h2>
+            <ul class="mt-4 grid gap-3 md:grid-cols-2">
+              {articles
+                .filter((article) => article.data.section === section)
+                .map((article) => (
+                  <li data-wiki-card={`${article.data.title} ${article.data.description}`.toLowerCase()}>
+                    <a class="block h-full rounded-2xl border border-line p-5 hover:border-accent hover:bg-elev" href={`/wiki/${article.id}`}>
+                      <h3 class="text-lg font-semibold">{article.data.title}</h3>
+                      <p class="mt-2 text-sm leading-6 text-muted">{article.data.description}</p>
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Base>
+
+<script>
+  const input = document.querySelector("#wiki-search")
+  const empty = document.querySelector("[data-wiki-empty]")
+  const cards = [...document.querySelectorAll("[data-wiki-card]")]
+  const sections = [...document.querySelectorAll("[data-wiki-section]")]
+  if (!(input instanceof HTMLInputElement)) throw new Error("missing search")
+
+  const apply = () => {
+    const query = input.value.trim().toLowerCase()
+    let shown = 0
+    for (const card of cards) {
+      if (!(card instanceof HTMLElement)) continue
+      const match = query.length === 0 || (card.dataset.wikiCard ?? "").includes(query)
+      card.hidden = !match
+      if (match) shown += 1
+    }
+    for (const section of sections) {
+      if (!(section instanceof HTMLElement)) continue
+      const visible = [...section.querySelectorAll("[data-wiki-card]")].some(
+        (card) => card instanceof HTMLElement && !card.hidden,
+      )
+      section.hidden = !visible
+    }
+    if (empty instanceof HTMLElement) empty.hidden = shown !== 0
+  }
+
+  input.addEventListener("input", apply)
+</script>

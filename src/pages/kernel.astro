@@ -1,0 +1,64 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "linux-aegis tracks Linux 6.18 longterm with balanced, performance, and powersave configuration profiles."
+const profiles = [
+  ["balanced", "schedutil", "preempt=voluntary", "1000 Hz"],
+  ["performance", "performance", "preempt=full", "1000 Hz"],
+  ["powersave", "powersave", "preempt=none", "250 Hz"],
+]
+---
+
+<Base
+  title="Kernel"
+  description={description}
+  path="/kernel"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Kernel", path: "/kernel" }])]}
+>
+  <PageIntro
+    eyebrow="Kernel"
+    title="Linux 6.18, tuned in config"
+    lede="linux-aegis follows the 6.18 longterm series from 6.18.54. The Arch configuration is the hardware base. Aegis fragments change preemption, timer frequency, cpufreq, compression, and zswap."
+  />
+  <section class="mx-auto max-w-6xl px-6 py-12">
+    <div class="overflow-x-auto rounded-2xl border border-line">
+      <table class="w-full min-w-[40rem] text-left text-sm">
+        <thead class="bg-elev">
+          <tr>
+            {["Profile", "Governor", "Boot parameter", "Hz"].map((heading) => (
+              <th class="px-4 py-3 font-semibold">{heading}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {profiles.map((row) => (
+            <tr class="border-t border-line">
+              {row.map((cell) => <td class="px-4 py-3 font-mono text-xs sm:text-sm">{cell}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <article class="rounded-2xl border border-line p-6">
+        <h2 class="text-xl font-semibold">Dynamic preemption</h2>
+        <p class="mt-2 text-muted">The three governors are built in. The boot parameter selects voluntary, full, or no forced preemption.</p>
+      </article>
+      <article class="rounded-2xl border border-line p-6">
+        <h2 class="text-xl font-semibold">Verified tarball</h2>
+        <p class="mt-2 text-muted">The package build checks the kernel.org signature for Linus Torvalds or Greg Kroah-Hartman before it compiles.</p>
+      </article>
+      <article class="rounded-2xl border border-line p-6">
+        <h2 class="text-xl font-semibold">Mitigations stay on</h2>
+        <p class="mt-2 text-muted">Upstream CPU mitigations remain at their default. Debug info is disabled so the package stays smaller.</p>
+      </article>
+    </div>
+    <p class="mt-8 text-muted">The current OS profile can still install Arch <code class="font-mono text-sm">linux</code> until <code class="font-mono text-sm">linux-aegis</code> is in the package repository.</p>
+    <p class="mt-4">
+      <a class="font-semibold text-accent hover:underline" href="/wiki/kernel-profiles">Kernel profiles in the wiki</a>
+    </p>
+  </section>
+</Base>

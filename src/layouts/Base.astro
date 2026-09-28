@@ -1,0 +1,37 @@
+---
+import Seo from "../components/Seo.astro"
+import Header from "../components/Header.astro"
+import Footer from "../components/Footer.astro"
+import "../styles/global.css"
+
+interface Props {
+  title: string
+  description: string
+  path: string
+  ogType?: "website" | "article"
+  robots?: string
+  published?: Date
+  updated?: Date
+  jsonLd?: unknown[]
+}
+
+const props = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101216" />
+    <script is:inline src="/theme-init.js"></script>
+    <Seo {...props} />
+  </head>
+  <body class="font-sans antialiased">
+    <Header />
+    <main id="content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "Aegis OS",
+  "short_name": "Aegis OS",
+  "description": "Ultra-lightweight Arch Linux for x86_64 UEFI PCs.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#101216",
+  "theme_color": "#101216",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ]
+}

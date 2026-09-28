@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Install Aegis OS from the live image onto a GPT disk with a 1 GiB EFI partition and systemd-boot."
+const steps = [
+  ["Boot the image", "Use UEFI, with Secure Boot off. The live user signs in and the installer opens."],
+  ["Choose the disk", "Pick a whole disk of at least 8 GiB and type its basename to confirm."],
+  ["Create the account", "Set the hostname, username, password, timezone, and ext4 or btrfs."],
+  ["Wait for pacstrap", "The installer needs a network connection while it downloads the target system."],
+  ["Reboot", "Remove the USB drive and sign in through tuigreet. Root stays locked."],
+]
+---
+
+<Base
+  title="Install"
+  description={description}
+  path="/install"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Install", path: "/install" }])]}
+>
+  <PageIntro
+    eyebrow="Install"
+    title="From the live desktop to the first login"
+    lede="The installer writes a new GPT, a 1 GiB FAT32 EFI partition mounted at /boot, and an ext4 or btrfs root. It then installs systemd-boot."
+  />
+  <ol class="mx-auto grid max-w-6xl gap-4 px-6 py-12">
+    {steps.map(([title, text], index) => (
+      <li class="grid gap-3 rounded-2xl border border-line p-6 sm:grid-cols-[3rem_minmax(0,1fr)]">
+        <span class="font-mono text-sm text-accent">{String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <h2 class="text-xl font-semibold">{title}</h2>
+          <p class="mt-2 text-muted">{text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <section class="mx-auto flex max-w-6xl flex-wrap gap-3 px-6 pb-16">
+    <a class="btn btn-primary" href="/download">Get the ISO</a>
+    <a class="btn btn-secondary" href="/wiki/install">Full installation article</a>
+    <a class="btn btn-secondary" href="/wiki/write-the-image">Write the USB drive</a>
+  </section>
+</Base>

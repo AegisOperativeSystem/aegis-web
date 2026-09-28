@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#101216"/>
+  <path fill="#7dd3c0" d="M96 168l42 16v48c0 28-18 48-42 58-24-10-42-30-42-58v-48l42-16z"/>
+  <text x="160" y="250" fill="#e7ecf3" font-family="Arial, Helvetica, sans-serif" font-size="84" font-weight="700">Aegis OS</text>
+  <text x="160" y="320" fill="#9aa3b5" font-family="Arial, Helvetica, sans-serif" font-size="32">Ultra-lightweight Arch Linux</text>
+  <rect x="160" y="368" width="168" height="8" fill="#7dd3c0"/>
+  <text x="160" y="450" fill="#7dd3c0" font-family="Arial, Helvetica, sans-serif" font-size="24">x86_64 | UEFI | GTK4</text>
+</svg>

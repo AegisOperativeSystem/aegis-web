@@ -1,0 +1,5 @@
+Contact: https://github.com/AegisOperativeSystem/aegis-os/security/advisories
+Expires: 2027-09-28T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://aegisos.vercel.app/.well-known/security.txt
+Policy: https://aegisos.vercel.app/security

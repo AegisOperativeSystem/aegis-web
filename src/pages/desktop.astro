@@ -1,0 +1,76 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import ShellMock from "../components/ShellMock.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "The Aegis desktop is a GTK4 panel on the labwc compositor, with foot, PipeWire, and a square theme."
+---
+
+<Base
+  title="Desktop"
+  description={description}
+  path="/desktop"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Desktop", path: "/desktop" }])]}
+>
+  <PageIntro
+    eyebrow="Desktop"
+    title="A GTK4 shell on labwc"
+    lede="The panel, theme, and session belong to Aegis. labwc supplies the wlroots compositor. The result is a 32 px bar, square windows, and a short list of bindings."
+  />
+  <div class="mx-auto grid max-w-6xl items-start gap-10 px-6 py-12 lg:grid-cols-2">
+    <ShellMock />
+    <div class="grid gap-4">
+      <article class="rounded-2xl border border-line p-6">
+        <h2 class="text-xl font-semibold">Session</h2>
+        <p class="mt-2 text-muted">greetd starts aegis-session. The script launches the polkit agent, PipeWire, and labwc. Autostart paints the background and starts the panel.</p>
+      </article>
+      <article class="rounded-2xl border border-line p-6">
+        <h2 class="text-xl font-semibold">Login</h2>
+        <p class="mt-2 text-muted">The live image signs in as live and opens the installer. The installed system stops at tuigreet and waits for the account you created.</p>
+      </article>
+    </div>
+  </div>
+  <section class="mx-auto max-w-6xl px-6 pb-16">
+    <h2 class="text-2xl font-semibold">Bindings</h2>
+    <div class="mt-4 overflow-x-auto rounded-2xl border border-line">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-elev">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Action</th>
+            <th class="px-4 py-3 font-semibold">Binding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-t border-line"><td class="px-4 py-3">Open foot</td><td class="px-4 py-3"><kbd class="kbd">Super</kbd> + <kbd class="kbd">Enter</kbd></td></tr>
+          <tr class="border-t border-line"><td class="px-4 py-3">Close window</td><td class="px-4 py-3"><kbd class="kbd">Super</kbd> + <kbd class="kbd">Q</kbd></td></tr>
+          <tr class="border-t border-line"><td class="px-4 py-3">Close window</td><td class="px-4 py-3"><kbd class="kbd">Alt</kbd> + <kbd class="kbd">F4</kbd></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h2 class="mt-12 text-2xl font-semibold">Color</h2>
+    <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        [
+          ["swatch-bg", "#101216", "Background"],
+          ["swatch-fg", "#e7ecf3", "Foreground"],
+          ["swatch-muted", "#8b95a7", "Muted"],
+          ["swatch-accent", "#7dd3c0", "Accent"],
+          ["swatch-danger", "#f07178", "Danger"],
+        ].map(([swatch, hex, name]) => (
+          <li class="flex items-center gap-3 rounded-2xl border border-line p-3">
+            <span class:list={["swatch", swatch]}></span>
+            <span>
+              <span class="block text-sm font-semibold">{name}</span>
+              <span class="font-mono text-xs text-muted">{hex}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-8">
+      <a class="font-semibold text-accent hover:underline" href="/wiki/desktop">Desktop article in the wiki</a>
+    </p>
+  </section>
+</Base>

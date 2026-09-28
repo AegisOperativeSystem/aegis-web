@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Security defaults for Aegis OS: locked root, disk confirmation, upstream CPU mitigations, and package signatures."
+---
+
+<Base
+  title="Security"
+  description={description}
+  path="/security"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Security", path: "/security" }])]}
+>
+  <PageIntro
+    eyebrow="Security"
+    title="Defaults that stay narrow"
+    lede="The installer confirms the target disk, locks root, and keeps kernel mitigations at the upstream setting. Package signatures become mandatory after the keyring is published."
+  />
+  <div class="mx-auto grid max-w-6xl gap-4 px-6 py-12 md:grid-cols-2">
+    <article class="rounded-2xl border border-line p-6">
+      <h2 class="text-xl font-semibold">Accounts</h2>
+      <p class="mt-3 text-muted">The installed root password is locked with passwd -l. You sign in as the wheel user created during installation. The live user exists only on the ISO and can run the installer through a dedicated polkit action.</p>
+    </article>
+    <article class="rounded-2xl border border-line p-6">
+      <h2 class="text-xl font-semibold">Disks</h2>
+      <p class="mt-3 text-muted">The backend accepts a whole disk node and requires the operator to type that name. Passwords go to chpasswd on standard input and are redacted in the log.</p>
+    </article>
+    <article class="rounded-2xl border border-line p-6">
+      <h2 class="text-xl font-semibold">Kernel</h2>
+      <p class="mt-3 text-muted">The source tarball is checked against the kernel.org signature. CPU mitigations stay at the upstream default. Secure Boot is not configured, so firmware must leave it disabled.</p>
+    </article>
+    <article class="rounded-2xl border border-line p-6">
+      <h2 class="text-xl font-semibold">Packages</h2>
+      <p class="mt-3 text-muted">The repository can require signatures once aegis-keyring is populated. The private key stays in GitHub Actions secrets and is never committed. The package client rejects names outside the pacman character set.</p>
+    </article>
+  </div>
+  <section class="mx-auto max-w-6xl px-6 pb-16">
+    <h2 class="text-2xl font-semibold">Reporting a vulnerability</h2>
+    <p class="mt-3 max-w-3xl text-muted">Open a private security advisory on the aegis-os repository. Include the version tag or commit, the component, and a description that lets someone else reproduce the issue.</p>
+    <p class="mt-4">
+      <a class="font-semibold text-accent hover:underline" href="https://github.com/AegisOperativeSystem/aegis-os/security/advisories">Security advisories</a>
+    </p>
+  </section>
+</Base>

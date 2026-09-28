@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro"
+import PageIntro from "../components/PageIntro.astro"
+import { breadcrumbLd } from "../lib/jsonld"
+import { integrationGuide, repos } from "../data/site"
+
+const site = Astro.site ?? new URL("https://aegisos.vercel.app")
+const description = "Contribute to Aegis OS through the operating system, kernel, and package repositories."
+---
+
+<Base
+  title="Contribute"
+  description={description}
+  path="/contribute"
+  jsonLd={[breadcrumbLd(site, [{ name: "Home", path: "/" }, { name: "Contribute", path: "/contribute" }])]}
+>
+  <PageIntro
+    eyebrow="Contribute"
+    title="Work in the repository that owns the change"
+    lede="Desktop and installer changes belong in aegis-os. Kernel config belongs in aegis-kernel. Package recipes belong in aegis-pkgs."
+  />
+  <section class="mx-auto grid max-w-6xl gap-4 px-6 py-12">
+    {repos.map((repo) => (
+      <a class="rounded-2xl border border-line p-6 hover:bg-elev" href={repo.href}>
+        <h2 class="text-xl font-semibold">{repo.name}</h2>
+        <p class="mt-2 text-muted">{repo.role}</p>
+      </a>
+    ))}
+  </section>
+  <section class="mx-auto max-w-6xl px-6 pb-16">
+    <h2 class="text-2xl font-semibold">Checks</h2>
+    <ul class="mt-4 grid max-w-3xl gap-3 text-muted">
+      <li>Pull requests run lint. They do not compile the kernel or build an ISO.</li>
+      <li>A version tag matching vX.Y.Z runs the release workflow in that repository.</li>
+      <li>Keep private signing keys out of git. The release order is documented in the integration guide.</li>
+    </ul>
+    <p class="mt-6">
+      <a class="font-semibold text-accent hover:underline" href={integrationGuide}>Integration guide</a>
+    </p>
+    <h2 class="mt-12 text-2xl font-semibold">This website</h2>
+    <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-elev p-5 font-mono text-sm"><code>npm install
+npm run dev</code></pre>
+  </section>
+</Base>
