@@ -1,5 +1,4 @@
 import { formatBytes, formatReleaseDate, type IsoRelease } from "../lib/releases"
-import { firmwareFor } from "../lib/vbox"
 
 const appendText = (parent: HTMLElement, tag: string, className: string, text: string) => {
   const node = document.createElement(tag)
@@ -32,12 +31,10 @@ const renderCard = (release: IsoRelease, featured: boolean): HTMLElement => {
   link.href = release.url
   link.textContent = featured ? "Download ISO" : "Download"
   actions.append(link)
-  if (featured) {
-    const machine = document.createElement("button")
-    machine.type = "button"
+  if (featured && release.machineUrl) {
+    const machine = document.createElement("a")
     machine.className = "btn btn-secondary"
-    machine.dataset.vbox = release.name
-    machine.dataset.firmware = firmwareFor(release.version)
+    machine.href = release.machineUrl
     machine.textContent = "VirtualBox machine"
     actions.append(machine)
   }

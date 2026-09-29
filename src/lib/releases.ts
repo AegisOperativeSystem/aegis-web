@@ -7,6 +7,7 @@ export type IsoRelease = {
   size: number
   published: string
   digest: string | null
+  machineUrl: string | null
 }
 
 type GhAsset = {
@@ -38,7 +39,7 @@ const parseAsset = (release: GhRelease, asset: GhAsset): IsoRelease | null => {
   const size = typeof asset.size === "number" ? asset.size : 0
   const rawDigest = asString(asset.digest)
   const digest = rawDigest?.startsWith("sha256:") ? rawDigest.slice(7) : rawDigest
-  return { version, name, url, size, published, digest }
+  return { version, name, url, size, published, digest, machineUrl: null }
 }
 
 export const formatBytes = (bytes: number): string => {
@@ -76,10 +77,16 @@ export const loadIsoReleases = async (): Promise<IsoRelease[]> => {
     if (!isRecord(entry)) return []
     const release = entry as GhRelease
     if (!Array.isArray(release.assets)) return []
-    return release.assets.flatMap((asset) => {
-      if (!isRecord(asset)) return []
+    const records = release.assets.filter(isRecord)
+    const machineUrl = records
+      .map((asset) => ({
+        name: asString(asset.name),
+        url: asString(asset.browser_download_url),
+      }))
+      .find((asset) => asset.name === "Aegis-OS-VirtualBox.zip")?.url ?? null
+    return records.flatMap((asset) => {
       const parsed = parseAsset(release, asset)
-      return parsed ? [parsed] : []
+      return parsed ? [{ ...parsed, machineUrl }] : []
     })
   })
 }

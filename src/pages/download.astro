@@ -4,7 +4,6 @@ import PageIntro from "../components/PageIntro.astro"
 import { breadcrumbLd } from "../lib/jsonld"
 import { formatBytes, formatReleaseDate, loadIsoReleases, type IsoRelease } from "../lib/releases"
 import { isoReleasesPage } from "../data/site"
-import { firmwareFor } from "../lib/vbox"
 
 let releases: IsoRelease[] = []
 let loadError = false
@@ -38,7 +37,7 @@ const jsonLd = [
   <PageIntro
     eyebrow="Download"
     title="Bootable ISO images"
-    lede="Download the image, or a VirtualBox machine that already has the right disk, memory, and boot order. Put the ISO next to the machine file and start it."
+    lede="Download the image, or one VirtualBox archive that already contains the ISO, an empty disk, and the machine."
   />
 
   <div class="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
@@ -71,7 +70,9 @@ const jsonLd = [
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
               <a class="btn btn-primary" href={releases[0].url}>Download ISO</a>
-              <button type="button" class="btn btn-secondary" data-vbox={releases[0].name} data-firmware={firmwareFor(releases[0].version)}>VirtualBox machine</button>
+              {releases[0].machineUrl && (
+                <a class="btn btn-secondary" href={releases[0].machineUrl}>VirtualBox machine</a>
+              )}
             </div>
             {
               releases[0].digest && (
@@ -118,9 +119,9 @@ const jsonLd = [
     <aside id="virtualbox" class="rounded-2xl border border-line bg-elev/80 p-6 shadow-[0_24px_50px_-36px_rgba(0,0,0,0.85)]">
       <h2 class="text-xl font-semibold">VirtualBox</h2>
       <ol class="mt-4 grid list-decimal gap-3 pl-5 text-sm leading-6 text-muted">
-        <li>Download the ISO and the VirtualBox machine.</li>
-        <li>Unzip the machine and put the ISO in that same folder. Keep the ISO file name.</li>
-        <li>Open Aegis OS.vbox. Images before 1.0.4 start with EFI on. From 1.0.4, EFI stays off. The 16 GiB disk is empty until you install.</li>
+        <li>Download VirtualBox machine. The zip already contains the ISO.</li>
+        <li>Extract the whole zip. Do not open the machine from inside the zip window.</li>
+        <li>Open Aegis OS.vbox and start it. EFI stays off from 1.0.4 on.</li>
       </ol>
       <p class="mt-4 text-sm text-muted">Use version 1.0.4 or newer. Earlier images boot only with EFI enabled.</p>
       <h2 class="mt-8 text-xl font-semibold">Before you write a USB drive</h2>
@@ -150,23 +151,8 @@ const jsonLd = [
 
 <script>
   import { loadIsoReleases } from "../lib/releases"
-  import { downloadVirtualBoxZip } from "../lib/vbox"
   import { bindCopy, paintReleases } from "../scripts/paint-releases"
 
-  const bindMachine = (scope: ParentNode) => {
-    scope.querySelectorAll("[data-vbox]").forEach((node) => {
-      if (!(node instanceof HTMLButtonElement) || node.dataset.bound === "true") return
-      node.dataset.bound = "true"
-      node.addEventListener("click", () => {
-        const isoName = node.dataset.vbox
-        const firmware = node.dataset.firmware === "EFI" ? "EFI" : "BIOS"
-        if (!isoName) return
-        downloadVirtualBoxZip(isoName, firmware)
-      })
-    })
-  }
-
-  bindMachine(document)
   const root = document.querySelector("#iso-releases")
   if (root instanceof HTMLElement) {
     bindCopy(root)
@@ -175,7 +161,6 @@ const jsonLd = [
       const filled = root.dataset.filled === "true"
       if (live.length > 0 || !filled) {
         paintReleases(root, live)
-        bindMachine(root)
       }
     } catch {
       // Keep the list rendered when this page was built.
