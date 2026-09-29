@@ -3,18 +3,18 @@
 
 :root {
   color-scheme: dark;
-  --bg: #101216;
-  --elev: #181b21;
-  --fg: #e7ecf3;
-  --muted: #9aa3b5;
-  --line: #2c333e;
-  --accent: #7dd3c0;
-  --accent-fg: #10211e;
-  --danger: #f07178;
+  --bg: #090d12;
+  --elev: #121820;
+  --fg: #f3f6fb;
+  --muted: #a7b3c4;
+  --line: #243041;
+  --accent: #3ee0c5;
+  --accent-fg: #06211c;
+  --danger: #ff8b8b;
   --font-mono: "Cascadia Code", "SFMono-Regular", ui-monospace, monospace;
-  --astro-code-foreground: #e7ecf3;
-  --astro-code-background: #181b21;
-  --astro-code-token-constant: #7dd3c0;
+  --astro-code-foreground: #f3f6fb;
+  --astro-code-background: #121820;
+  --astro-code-token-constant: #3ee0c5;
   --astro-code-token-string: #c9e7c2;
   --astro-code-token-comment: #8b95a7;
   --astro-code-token-keyword: #f0c7a0;
@@ -22,17 +22,17 @@
   --astro-code-token-function: #9fd4ff;
   --astro-code-token-string-expression: #c9e7c2;
   --astro-code-token-punctuation: #c5cedb;
-  --astro-code-token-link: #7dd3c0;
+  --astro-code-token-link: #3ee0c5;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --bg: #f4f6f8;
-    --elev: #ffffff;
-    --fg: #161a20;
-    --muted: #3f4d5e;
-    --line: #d5dbe3;
+    --bg: #f6f4ef;
+    --elev: #fffdf8;
+    --fg: #171c22;
+    --muted: #3e4b5c;
+    --line: #ddd6c8;
     --accent: #0f766e;
     --accent-fg: #f4fffc;
     --danger: #9f1239;
@@ -52,17 +52,17 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #101216;
-  --elev: #181b21;
-  --fg: #e7ecf3;
-  --muted: #9aa3b5;
-  --line: #2c333e;
-  --accent: #7dd3c0;
-  --accent-fg: #10211e;
-  --danger: #f07178;
-  --astro-code-foreground: #e7ecf3;
-  --astro-code-background: #181b21;
-  --astro-code-token-constant: #7dd3c0;
+  --bg: #090d12;
+  --elev: #121820;
+  --fg: #f3f6fb;
+  --muted: #a7b3c4;
+  --line: #243041;
+  --accent: #3ee0c5;
+  --accent-fg: #06211c;
+  --danger: #ff8b8b;
+  --astro-code-foreground: #f3f6fb;
+  --astro-code-background: #121820;
+  --astro-code-token-constant: #3ee0c5;
   --astro-code-token-string: #c9e7c2;
   --astro-code-token-comment: #8b95a7;
   --astro-code-token-keyword: #f0c7a0;
@@ -70,16 +70,16 @@
   --astro-code-token-function: #9fd4ff;
   --astro-code-token-string-expression: #c9e7c2;
   --astro-code-token-punctuation: #c5cedb;
-  --astro-code-token-link: #7dd3c0;
+  --astro-code-token-link: #3ee0c5;
 }
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #f4f6f8;
-  --elev: #ffffff;
-  --fg: #161a20;
-  --muted: #3f4d5e;
-  --line: #d5dbe3;
+  --bg: #f6f4ef;
+  --elev: #fffdf8;
+  --fg: #171c22;
+  --muted: #3e4b5c;
+  --line: #ddd6c8;
   --accent: #0f766e;
   --accent-fg: #f4fffc;
   --danger: #9f1239;
@@ -117,8 +117,12 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse 70% 36% at 50% -12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 280px),
+    linear-gradient(color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
     var(--bg);
+  background-size: auto, 32px 32px, 32px 32px, auto;
+  background-position: 0 0, -1px -1px, -1px -1px, 0 0;
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -152,6 +156,14 @@ body {
   outline: none;
 }
 
+.rounded-2xl.border {
+  box-shadow: 0 24px 50px -40px rgba(0, 0, 0, 0.85);
+}
+
+.rounded-2xl.border:not([class*="bg-"]) {
+  background-color: color-mix(in srgb, var(--elev) 88%, transparent);
+}
+
 .skip {
   position: absolute;
   left: 1rem;
@@ -175,17 +187,18 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
+  border-radius: 0.75rem;
   padding: 0.5rem 1.25rem;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 650;
   line-height: 1.25rem;
   text-decoration: none;
-  transition: filter 200ms ease-out, transform 200ms ease-out, background-color 200ms ease-out;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
+  transition: background-color 180ms ease-out, transform 180ms ease-out, border-color 180ms ease-out;
 }
 
-.btn:hover {
-  filter: brightness(1.08);
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 86%, white);
 }
 
 .btn:active {
@@ -204,13 +217,14 @@ body {
 
 .btn-secondary {
   border: 1px solid var(--line);
-  background: transparent;
+  background: color-mix(in srgb, var(--elev) 70%, transparent);
   color: var(--fg);
+  box-shadow: none;
 }
 
 .btn-secondary:hover {
   background: var(--elev);
-  filter: none;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 
 .icon-sun {

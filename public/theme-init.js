@@ -9,7 +9,7 @@
           ? "light"
           : "dark"
     document.documentElement.dataset.theme = theme
-    if (meta) meta.setAttribute("content", theme === "light" ? "#f4f6f8" : "#101216")
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f6f4ef" : "#090d12")
   } catch {
     document.documentElement.dataset.theme = "dark"
   }

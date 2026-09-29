@@ -1,4 +1,5 @@
 import { formatBytes, formatReleaseDate, type IsoRelease } from "../lib/releases"
+import { firmwareFor } from "../lib/vbox"
 
 const appendText = (parent: HTMLElement, tag: string, className: string, text: string) => {
   const node = document.createElement(tag)
@@ -24,11 +25,23 @@ const renderCard = (release: IsoRelease, featured: boolean): HTMLElement => {
     "mt-2 text-sm text-muted",
     `${release.version} · ${formatReleaseDate(release.published)} · ${formatBytes(release.size)}`,
   )
+  const actions = document.createElement("div")
+  actions.className = "mt-6 flex flex-wrap gap-3"
   const link = document.createElement("a")
-  link.className = "btn btn-primary mt-6"
+  link.className = "btn btn-primary"
   link.href = release.url
   link.textContent = featured ? "Download ISO" : "Download"
-  card.append(link)
+  actions.append(link)
+  if (featured) {
+    const machine = document.createElement("button")
+    machine.type = "button"
+    machine.className = "btn btn-secondary"
+    machine.dataset.vbox = release.name
+    machine.dataset.firmware = firmwareFor(release.version)
+    machine.textContent = "VirtualBox machine"
+    actions.append(machine)
+  }
+  card.append(actions)
   if (release.digest) {
     const block = document.createElement("div")
     block.className = "mt-6"

@@ -4,6 +4,7 @@ import PageIntro from "../components/PageIntro.astro"
 import { breadcrumbLd } from "../lib/jsonld"
 import { formatBytes, formatReleaseDate, loadIsoReleases, type IsoRelease } from "../lib/releases"
 import { isoReleasesPage } from "../data/site"
+import { firmwareFor } from "../lib/vbox"
 
 let releases: IsoRelease[] = []
 let loadError = false
@@ -14,7 +15,7 @@ try {
 }
 
 const site = Astro.site ?? new URL("https://aegisos.vercel.app")
-const description = "Download Aegis OS ISO images for x86_64 UEFI, with SHA-256 checksums and USB write instructions."
+const description = "Download Aegis OS ISO images and a ready VirtualBox machine for x86_64, with SHA-256 checksums."
 const jsonLd = [
   breadcrumbLd(site, [
     { name: "Home", path: "/" },
@@ -37,7 +38,7 @@ const jsonLd = [
   <PageIntro
     eyebrow="Download"
     title="Bootable ISO images"
-    lede="Images are GitHub release assets. This page lists every .iso file published by aegis-os and shows the SHA-256 digest GitHub recorded for it."
+    lede="Download the image, or a VirtualBox machine that already has the right disk, memory, and boot order. Put the ISO next to the machine file and start it."
   />
 
   <div class="mx-auto grid max-w-6xl gap-8 px-6 py-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
@@ -68,7 +69,10 @@ const jsonLd = [
             <p class="mt-2 text-sm text-muted">
               {releases[0].version} · {formatReleaseDate(releases[0].published)} · {formatBytes(releases[0].size)}
             </p>
-            <a class="btn btn-primary mt-6" href={releases[0].url}>Download ISO</a>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a class="btn btn-primary" href={releases[0].url}>Download ISO</a>
+              <button type="button" class="btn btn-secondary" data-vbox={releases[0].name} data-firmware={firmwareFor(releases[0].version)}>VirtualBox machine</button>
+            </div>
             {
               releases[0].digest && (
                 <div class="mt-6">
@@ -111,10 +115,17 @@ const jsonLd = [
       }
     </div>
 
-    <aside class="rounded-2xl border border-line p-6">
-      <h2 class="text-xl font-semibold">Before you write the USB drive</h2>
+    <aside id="virtualbox" class="rounded-2xl border border-line bg-elev/80 p-6 shadow-[0_24px_50px_-36px_rgba(0,0,0,0.85)]">
+      <h2 class="text-xl font-semibold">VirtualBox</h2>
+      <ol class="mt-4 grid list-decimal gap-3 pl-5 text-sm leading-6 text-muted">
+        <li>Download the ISO and the VirtualBox machine.</li>
+        <li>Unzip the machine and put the ISO in that same folder. Keep the ISO file name.</li>
+        <li>Open Aegis OS.vbox. Images before 1.0.4 start with EFI on. From 1.0.4, EFI stays off. The 16 GiB disk is empty until you install.</li>
+      </ol>
+      <p class="mt-4 text-sm text-muted">Use version 1.0.4 or newer. Earlier images boot only with EFI enabled.</p>
+      <h2 class="mt-8 text-xl font-semibold">Before you write a USB drive</h2>
       <ul class="mt-4 grid gap-3 text-sm leading-6 text-muted">
-        <li>x86_64 PC with UEFI firmware</li>
+        <li>x86_64 PC, BIOS or UEFI</li>
         <li>Secure Boot disabled</li>
         <li>A whole disk of at least 8 GiB for installation</li>
         <li>A network connection during pacstrap</li>
@@ -139,15 +150,33 @@ const jsonLd = [
 
 <script>
   import { loadIsoReleases } from "../lib/releases"
+  import { downloadVirtualBoxZip } from "../lib/vbox"
   import { bindCopy, paintReleases } from "../scripts/paint-releases"
 
+  const bindMachine = (scope: ParentNode) => {
+    scope.querySelectorAll("[data-vbox]").forEach((node) => {
+      if (!(node instanceof HTMLButtonElement) || node.dataset.bound === "true") return
+      node.dataset.bound = "true"
+      node.addEventListener("click", () => {
+        const isoName = node.dataset.vbox
+        const firmware = node.dataset.firmware === "EFI" ? "EFI" : "BIOS"
+        if (!isoName) return
+        downloadVirtualBoxZip(isoName, firmware)
+      })
+    })
+  }
+
+  bindMachine(document)
   const root = document.querySelector("#iso-releases")
   if (root instanceof HTMLElement) {
     bindCopy(root)
     try {
       const live = await loadIsoReleases()
       const filled = root.dataset.filled === "true"
-      if (live.length > 0 || !filled) paintReleases(root, live)
+      if (live.length > 0 || !filled) {
+        paintReleases(root, live)
+        bindMachine(root)
+      }
     } catch {
       // Keep the list rendered when this page was built.
     }

@@ -17,12 +17,12 @@ export const faqs: Faq[] = [
   {
     question: "Which computers can boot the image?",
     answer:
-      "The image is built for x86_64 PCs with UEFI firmware. The installer accepts a whole disk of at least 8 GiB and creates a 1 GiB EFI system partition plus a root filesystem.",
+      "The image is built for x86_64 PCs with BIOS or UEFI firmware. The installer accepts a whole disk of at least 8 GiB. UEFI gets a 1 GiB EFI system partition. BIOS gets one bootable root partition.",
   },
   {
     question: "Does it boot with legacy BIOS or on ARM?",
     answer:
-      "The current image is UEFI only and x86_64 only. Enable UEFI boot in firmware setup and turn Secure Boot off before you start the image.",
+      "Version 1.0.4 and newer boot on legacy BIOS and UEFI. The image is x86_64 only. Turn Secure Boot off. In VirtualBox, leave EFI off and attach the ISO, or use the VirtualBox machine from the download page.",
   },
   {
     question: "Which kernel does a new install use?",

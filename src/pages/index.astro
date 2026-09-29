@@ -36,31 +36,31 @@ const jsonLd = [
 ]
 
 const points = [
-  { href: "/desktop", title: "GTK4 desktop", text: "A 32 px panel on labwc, with foot, PipeWire, and a square theme." },
-  { href: "/install", title: "Graphical installer", text: "GPT, a 1 GiB EFI partition, ext4 or btrfs, then systemd-boot." },
+  { href: "/desktop", title: "GTK4 desktop", text: "A panel and a dock on labwc, with Files, a text editor, and foot." },
+  { href: "/install", title: "Graphical installer", text: "UEFI or BIOS. ext4 or btrfs, a swapfile, language, and keyboard." },
   { href: "/kernel", title: "Longterm kernel", text: "linux-aegis 6.18 with balanced, performance, and powersave profiles." },
   { href: "/packages", title: "Pacman repository", text: "First-party packages and a GTK client that calls pacman." },
 ]
 ---
 
 <Base
-  title="Aegis OS — Lightweight Arch for UEFI"
+  title="Aegis OS — Lightweight Arch"
   description={siteDescription}
   path="/"
   jsonLd={jsonLd}
 >
   <section class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:py-24">
     <div>
-      <p class="text-sm font-semibold text-accent">Arch Linux · x86_64 · UEFI</p>
-      <h1 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.12]">
+      <p class="text-sm font-semibold tracking-[0.16em] text-accent uppercase">Arch Linux · x86_64 · BIOS and UEFI</p>
+      <h1 class="mt-4 text-5xl font-semibold tracking-[-0.045em] sm:text-6xl sm:leading-[1.02]">
         A fast Arch system, with the weight removed.
       </h1>
-      <p class="mt-5 max-w-xl text-lg leading-8 text-muted">
-        Aegis OS is a live image, a GTK4 desktop, and a graphical installer. Pacman stays the package manager. The boot path is systemd-boot.
+      <p class="mt-6 max-w-xl text-lg leading-8 text-muted">
+        A live image, a GTK4 desktop, and a graphical installer. It boots in VirtualBox with EFI off. Pacman stays the package manager.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a class="btn btn-primary" href="/download">Download the ISO</a>
-        <a class="btn btn-secondary" href="/wiki">Read the wiki</a>
+        <a class="btn btn-secondary" href="/download#virtualbox">VirtualBox machine</a>
       </div>
     </div>
     <ShellMock />
@@ -71,7 +71,7 @@ const points = [
       {
         [
           ["Desktop", "GTK4 on labwc"],
-          ["Boot", "UEFI systemd-boot"],
+          ["Boot", "BIOS and UEFI"],
           ["Kernel", "Linux 6.18 LTS"],
           ["Packages", "pacman"],
         ].map(([term, detail]) => (
@@ -89,7 +89,7 @@ const points = [
     <div class="mt-8 grid gap-4 md:grid-cols-2">
       {
         points.map((point) => (
-          <a class="block rounded-2xl border border-line bg-elev p-6 hover:border-accent active:scale-[0.99]" href={point.href}>
+          <a class="block rounded-2xl border border-line bg-elev/90 p-6 shadow-[0_20px_50px_-36px_rgba(0,0,0,0.9)] hover:border-accent active:scale-[0.99]" href={point.href}>
             <h3 class="text-xl font-semibold">{point.title}</h3>
             <p class="mt-2 text-muted">{point.text}</p>
           </a>
