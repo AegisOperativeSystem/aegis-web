@@ -27,11 +27,14 @@ The plan then writes:
 
 ## Account
 
-Choose a hostname, a username, a password of at least 8 characters, a timezone, and ext4 or btrfs.
+Choose a hostname, a username, and a password of at least 8 characters. Type the password twice. The next page sets the timezone, language, and keyboard.
 
 - The hostname is a lowercase DNS label.
 - The username cannot be `root`, `live`, or `greeter`.
-- The timezone is `UTC` or a `Region/City` name such as `Europe/Rome`.
+- The timezone is one of the listed `Region/City` names, or UTC.
+- The language is a listed UTF-8 locale, written to `/etc/locale.gen`.
+- The keyboard is written to `/etc/vconsole.conf` and to the user labwc environment.
+- Swap is off, or a 2 GiB or 4 GiB swapfile on the root filesystem.
 - The password is sent to `chpasswd` on standard input and is redacted in the installer log.
 
 The new user is added to `wheel`. `sudo` is allowed for that group. The root password is locked.

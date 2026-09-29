@@ -8,7 +8,7 @@ const description = "Install Aegis OS from the live image onto a GPT disk with a
 const steps = [
   ["Boot the image", "Use UEFI, with Secure Boot off. The live user signs in and the installer opens."],
   ["Choose the disk", "Pick a whole disk of at least 8 GiB and type its basename to confirm."],
-  ["Create the account", "Set the hostname, username, password, timezone, and ext4 or btrfs."],
+  ["Set the system", "Choose ext4 or btrfs, an optional swapfile, the account, timezone, language, and keyboard."],
   ["Wait for pacstrap", "The installer needs a network connection while it downloads the target system."],
   ["Reboot", "Remove the USB drive and sign in through tuigreet. Root stays locked."],
 ]

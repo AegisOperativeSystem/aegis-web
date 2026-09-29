@@ -5,7 +5,7 @@ import ShellMock from "../components/ShellMock.astro"
 import { breadcrumbLd } from "../lib/jsonld"
 
 const site = Astro.site ?? new URL("https://aegisos.vercel.app")
-const description = "The Aegis desktop is a GTK4 panel on the labwc compositor, with foot, PipeWire, and a square theme."
+const description = "The Aegis desktop is a GTK4 panel and dock on labwc, with Firefox, Files, a text editor, and the other daily applications."
 ---
 
 <Base
@@ -24,7 +24,7 @@ const description = "The Aegis desktop is a GTK4 panel on the labwc compositor, 
     <div class="grid gap-4">
       <article class="rounded-2xl border border-line p-6">
         <h2 class="text-xl font-semibold">Session</h2>
-        <p class="mt-2 text-muted">greetd starts aegis-session. The script launches the polkit agent, PipeWire, and labwc. Autostart paints the background and starts the panel.</p>
+        <p class="mt-2 text-muted">greetd starts aegis-session. The dock pins Firefox, Files, Text Editor, the terminal, and Packages. The grid opens every other application, including Loupe, Evince, Calculator, Disks, and sound settings.</p>
       </article>
       <article class="rounded-2xl border border-line p-6">
         <h2 class="text-xl font-semibold">Login</h2>
