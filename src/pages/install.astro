@@ -6,7 +6,7 @@ import { breadcrumbLd } from "../lib/jsonld"
 const site = Astro.site ?? new URL("https://aegisos.vercel.app")
 const description = "Install Aegis OS from the live image onto a GPT disk with a 1 GiB EFI partition and systemd-boot."
 const steps = [
-  ["Boot the image", "Use UEFI, with Secure Boot off. The live user signs in and the installer opens."],
+  ["Boot the image", "Attach the ISO and start the VM. UEFI and BIOS both work. Secure Boot stays off."],
   ["Choose the disk", "Pick a whole disk of at least 8 GiB and type its basename to confirm."],
   ["Set the system", "Choose ext4 or btrfs, an optional swapfile, the account, timezone, language, and keyboard."],
   ["Wait for pacstrap", "The installer needs a network connection while it downloads the target system."],

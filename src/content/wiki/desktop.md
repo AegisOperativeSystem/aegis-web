@@ -18,11 +18,11 @@ The bar shows the clock and buttons for applications, the terminal, ending the s
 
 `aegis-session` is the command greetd runs. It exports the Wayland variables, starts the polkit GNOME agent when that binary exists, starts PipeWire, WirePlumber, and the PulseAudio compatibility daemon, then replaces itself with labwc.
 
-labwc autostart paints `#101216` with swaybg and starts the shell and the dock. The dock is a centered pill on the bottom edge. Pinned icons open Firefox, Files, the text editor, the terminal, and the package client. The grid lists every application. On a first login, `aegis-tour` walks through the desktop and writes `~/.config/aegis/tour-done`. On the live image the installer starts after that tour.
+labwc autostart paints `#101216` with swaybg and starts the shell and the dock. The dock is a centered pill on the bottom edge. Pinned icons open Files, the text editor, the terminal, and the package client. The grid lists every application. On a first login, `aegis-tour` walks through the desktop and writes `~/.config/aegis/tour-done`. On the live image the installer starts after that tour.
 
 ## Applications
 
-The image includes Firefox, Nautilus, GNOME Text Editor, Loupe, Evince, GNOME Calculator, GNOME Disks, Baobab, File Roller, and pavucontrol. The terminal remains foot.
+The image includes PCManFM, Mousepad, pavucontrol, and foot. The live image boots on UEFI and on legacy BIOS, so a default VirtualBox machine can start it.
 
 ## Theme
 

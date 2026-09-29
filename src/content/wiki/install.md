@@ -10,7 +10,7 @@ The installer is a GTK4 application over a fixed installation plan. It runs on t
 
 ## Before you start
 
-- Boot the [live image](/wiki/getting-started) in UEFI mode.
+- Boot the [live image](/wiki/getting-started). UEFI and legacy BIOS both start the live system. In VirtualBox, attach the ISO to the optical drive. EFI can stay off.
 - Connect to a network. `pacstrap` downloads the target system from the Arch mirrors.
 - Back up the target disk. The installer replaces its partition table.
 - Read the [system requirements](/wiki/system-requirements).
